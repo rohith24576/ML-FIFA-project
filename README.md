@@ -1,154 +1,87 @@
-# ⚽ FIFA Match Analytics & Performance Prediction (ML Capstone)
+# ⚽ FIFA Match Analytics & Performance Prediction
 
 **Course:** 23CSE301 Machine Learning — Capstone Project  
-**Academic Year:** 2026–27 | B.Tech. Computer Science & Engineering  
-**Scope:** Review 1 (Full Regression Track + Classification Part A) & Review 2 Ready Pipeline  
+**Academic Year:** 2026–27 | B.Tech Computer Science & Engineering  
 
 ---
 
-## 📌 1. Project Overview & Problem Statement
-
-This project builds an end-to-end Machine Learning pipeline utilizing match-level and tournament performance data for professional football players. It addresses three complementary core challenges:
-
-1. **Track 1 — Regression (Review 1):**  
-   Predict a player's continuous match **Performance Index** (`performance_score`, scaled 0–100) using multi-dimensional technical, tactical, and athletic features while eliminating post-hoc target leakage (`player_rating`, `tournament_rating`).
-2. **Track 2 — Classification (Review 1 Part A, Review 2 Part B):**  
-   Classify player playing positions (`Goalkeeper`, `Defender`, `Midfielder`, `Forward`) based purely on match event signatures (expected goals, passing distribution, defensive duel counts, shot profiles, athletic intensity).
-3. **Track 3 — Clustering (Review 2):**  
-   Discover unsupervised tactical archetypes and player profiles (e.g. Poacher, Deep-Lying Playmaker, Ball-Winning Midfielder, Sweeper Keeper) via K-Means and Agglomerative Hierarchical clustering.
+## 📌 Project Overview
+This project builds a Machine Learning pipeline using FIFA player match performance data to address three core tasks:
+1. **Regression Track:** Predict continuous player performance score (0–100).
+2. **Classification Track:** Classify player position (`Goalkeeper`, `Defender`, `Midfielder`, `Forward`).
+3. **Clustering Track:** Group player tactical profiles using unsupervised learning (K-Means & Hierarchical).
 
 ---
 
-## 🗂️ 2. Repository Directory Structure
-
-In accordance with Section 8 of the Capstone Guidelines:
+## 🗂️ Project Structure
 
 ```
 ML-FIFA-project/
 │
-├── README.md                      # Comprehensive project overview, results tables, instructions
-├── requirements.txt               # Pinned Python dependencies
-├── 23CSE301_ML_26_27_Capstone_Guidelines.pdf  # Official guidelines & rubrics
+├── README.md                      # Project overview and results
+├── requirements.txt               # Required Python packages
 │
-├── data/
-│   └── data.csv                   # Raw FIFA match performance database (54,600 records × 75 attributes)
+├── data/                          # Dataset files
+│   └── data.csv                   # Raw FIFA match performance dataset
 │
-├── notebooks/
-│   ├── regression.ipynb           # [Review 1] Full Regression track (EDA, 10 models, tuning, plots)
-│   ├── classification.ipynb       # [Review 1 Part A] Classification track (5 models, tree plot, ROC-AUC)
-│   └── clustering.ipynb           # [Review 2 Ready] Unsupervised clustering skeleton (K-Means, Hierarchical)
+├── notebooks/                     # Jupyter notebooks
+│   ├── preprocessing.ipynb        # Data cleaning, encoding, PCA & feature engineering
+│   ├── regression.ipynb           # Regression track (10 algorithms)
+│   ├── classification.ipynb       # Classification track (5 algorithms - Part A)
+│   └── clustering.ipynb           # Clustering track (K-Means & Hierarchical)
 │
-├── models/                        # Serialized production model checkpoints (.joblib)
-│   ├── best_regression_model.joblib
-│   ├── scaler_regression.joblib
-│   ├── best_classification_model.joblib
-│   ├── scaler_classification.joblib
-│   └── label_encoder_position.joblib
-│
-└── app/                           # Bonus Track: Interactive Streamlit Web Interface
-    └── app.py                     # Live inference GUI for performance & position prediction
+├── models/                        # Saved model files (.joblib)
+└── app/                           # Interactive Streamlit application
+    └── app.py
 ```
 
 ---
 
-## 📊 3. Dataset Audit & Preprocessing
+## 📊 Results Summary
 
-- **Total Records:** 54,600 match rows across 75 statistical columns (1,248 unique professional players).
-- **Missing Values:** 0 null values across all features.
-- **Active Match Filtering:** Unplayed substitute appearances (`minutes_played == 0`) are filtered out for match-impact modeling, focusing on active appearances.
-- **Data Leakage Safeguard:** All feature transformers (`StandardScaler`, `LabelEncoder`) are **fitted strictly on `X_train`** and applied (transformed) on `X_test`.
-- **Engineered Features (Rubric B3):**
-  1. `goal_contribution_rate`: $(goals + assists) / (minutes\_played / 90.0)$ — Standardizes offensive output per 90 mins.
-  2. `work_rate_intensity`: $sprint\_distance\_km / (distance\_covered\_km + 0.001)$ — Quantifies athletic burst ratio.
-  3. `passing_efficiency`: $successful\_passes / (total\_passes + 1.0)$ — Normalized passing efficiency.
+### 1. Regression Track (Target: `performance_score`)
 
----
-
-## 📈 4. Review 1 Results Summary
-
-### 4.1 Regression Track (10 Algorithms Ranked by $R^2$)
-Target: `performance_score` (Continuous 0–100) | Evaluated on identical test split ($N=1,200$).
-
-| Rank | Algorithm | $R^2$ Score | RMSE | MAE | Notes & Model Mechanics |
-| :---: | :--- | :---: | :---: | :---: | :--- |
-| 🥇 1 | **Gradient Boosting Regressor** | **0.8351** | **3.2241** | **2.5012** | Sequential residual boosting; tuned via `GridSearchCV` |
-| 🥈 2 | **Random Forest Regressor** | **0.8284** | **3.2889** | **2.5510** | Ensemble bagging; 5-fold CV $R^2 = 0.823 \pm 0.008$ |
-| 3 | Support Vector Regressor (SVR RBF) | 0.8120 | 3.4428 | 2.6845 | Non-linear mapping; scaled input vectors |
-| 4 | Linear Regression | 0.7981 | 3.5678 | 2.8010 | Interpretable baseline linear weights |
-| 5 | Ridge Regression ($\alpha=1.0$) | 0.7981 | 3.5677 | 2.8009 | $L_2$ regularization controlling parameter magnitude |
-| 6 | ElasticNet Regression ($\alpha=0.05$) | 0.7932 | 3.6105 | 2.8420 | Balanced $L_1 + L_2$ convex regularization |
-| 7 | Lasso Regression ($\alpha=0.05$) | 0.7915 | 3.6254 | 2.8560 | $L_1$ penalty producing parameter sparsity |
-| 8 | K-Nearest Neighbors Regressor ($k=9$) | 0.7812 | 3.7145 | 2.9120 | Distance-weighted metric interpolation |
-| 9 | Decision Tree Regressor (`max_depth=6`) | 0.7524 | 3.9521 | 3.1042 | Axis-aligned single decision tree |
-| 10 | Polynomial Regression ($\text{deg}=2$) | 0.7410 | 4.0425 | 3.1950 | Polynomial feature interactions on core predictors |
-
-**5-Fold Cross-Validation on Top 2 Models:**
-- Gradient Boosting Regressor: $R^2 = 0.831 \pm 0.007$
-- Random Forest Regressor: $R^2 = 0.823 \pm 0.008$
+| Rank | Algorithm | R² Score | RMSE | MAE |
+| :---: | :--- | :---: | :---: | :---: |
+| 1 | **Gradient Boosting Regressor** | **0.8351** | **3.2241** | **2.5012** |
+| 2 | **Random Forest Regressor** | **0.8284** | **3.2889** | **2.5510** |
+| 3 | Support Vector Regressor (SVR) | 0.8120 | 3.4428 | 2.6845 |
+| 4 | Linear Regression | 0.7981 | 3.5678 | 2.8010 |
+| 5 | Ridge Regression | 0.7981 | 3.5677 | 2.8009 |
+| 6 | ElasticNet Regression | 0.7932 | 3.6105 | 2.8420 |
+| 7 | Lasso Regression | 0.7915 | 3.6254 | 2.8560 |
+| 8 | K-Nearest Neighbors | 0.7812 | 3.7145 | 2.9120 |
+| 9 | Decision Tree Regressor | 0.7524 | 3.9521 | 3.1042 |
+| 10 | Polynomial Regression (deg=2) | 0.7410 | 4.0425 | 3.1950 |
 
 ---
 
-### 4.2 Classification Track Part A (5 Algorithms)
-Target: `position` (`Goalkeeper`, `Defender`, `Midfielder`, `Forward`) | Stratified Split.
+### 2. Classification Track (Target: `position`)
 
-| Algorithm | Accuracy | Weighted Precision | Weighted Recall | Weighted F1 | ROC-AUC (OvR) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Support Vector Machine (SVC)** | **0.8925** | **0.8940** | **0.8925** | **0.8918** | **0.9780** |
-| **Logistic Regression** | 0.8842 | 0.8850 | 0.8842 | 0.8835 | 0.9740 |
-| **K-Nearest Neighbors ($k=7$)** | 0.8650 | 0.8665 | 0.8650 | 0.8640 | 0.9520 |
-| **Decision Tree Classifier (`depth=4`)** | 0.8417 | 0.8430 | 0.8417 | 0.8405 | 0.9250 |
-| **Gaussian Naive Bayes** | 0.8125 | 0.8210 | 0.8125 | 0.8105 | 0.9380 |
-
-*Key Findings:*
-- **Goalkeeper Classification:** Achieves 100% precision and recall across all models due to mutually exclusive actions (`saves`, `punches`, `save_percentage`).
-- **Defenders & Forwards:** Readily separated via `clearances` / `tackles` vs. `expected_goals_xg` / `shots`.
-- **Midfielders:** Have shared tactical overlap with box-to-box defensive tasks and final-third playmaking.
+| Rank | Algorithm | Accuracy | Weighted Precision | Weighted F1 | ROC-AUC |
+| :---: | :--- | :---: | :---: | :---: | :---: |
+| 1 | **Support Vector Machine (SVC)** | **0.9442** | **0.9442** | **0.9441** | **0.9924** |
+| 2 | **Logistic Regression** | **0.9383** | **0.9384** | **0.9382** | **0.9940** |
+| 3 | **K-Nearest Neighbors ($k=7$)** | **0.8842** | **0.8836** | **0.8833** | **0.9758** |
+| 4 | **Gaussian Naive Bayes** | **0.7958** | **0.8027** | **0.7885** | **0.9523** |
+| 5 | **Decision Tree (`depth=4`)** | **0.7700** | **0.7831** | **0.7639** | **0.9182** |
 
 ---
 
-## ⚙️ 5. Installation & Execution Guide
+## ⚙️ How to Run
 
-### Prerequisites
-- Python 3.10+ (tested on Python 3.14)
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Setup Environment
-```bash
-# 1. Clone repository
-git clone https://github.com/rohith24576/ML-FIFA-project.git
-cd ML-FIFA-project
+2. **Run Notebooks:**
+   Launch Jupyter and open notebooks in `notebooks/`:
+   ```bash
+   jupyter notebook
+   ```
 
-# 2. Install dependencies
-pip install -r requirements.txt
-```
-
-### Running the Notebooks
-Launch Jupyter Notebook or JupyterLab:
-```bash
-jupyter notebook
-```
-Navigate to `notebooks/` and open:
-- `notebooks/regression.ipynb` — Full Regression Track, EDA, Hyperparameter Tuning & Visualizations.
-- `notebooks/classification.ipynb` — Part A Multi-Class Position Classification.
-- `notebooks/clustering.ipynb` — Review 2 Unsupervised Player Profiling Skeleton.
-
-### Running the Bonus Streamlit Application
-```bash
-streamlit run app/app.py
-```
-Open `http://localhost:8501` in your browser to interactively simulate match performance predictions and position classification in real time!
-
----
-
-## 👥 6. Team & Ownership
-
-| Team Member | Primary Assigned Track | Viva Ownership Scope |
-| :--- | :--- | :--- |
-| **Member 1** | **Regression Track** | EDA, Feature Engineering, 10 Regression Algorithms, `GridSearchCV`, Cross-Validation |
-| **Member 2** | **Classification Track** | Stratification, 10 Classification Algorithms, Confusion Matrices, ROC-AUC |
-| **Member 3** | **Clustering & App Track** | Unsupervised Profiling (K-Means, Hierarchical), PCA/t-SNE Visuals, Streamlit Deployment |
-
----
-
-## 📜 7. Academic Integrity & Acknowledgements
-- Scaffolding and execution assistance: Antigravity IDE (DeepMind).
-- All EDA, feature interpretations, and modeling pipeline decisions are original to this project.
+3. **Run Streamlit Web App:**
+   ```bash
+   streamlit run app/app.py
+   ```
