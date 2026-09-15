@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.ipynb_checkpoints/
+.pytest_cache/
+
+# Environments
+env/
+venv/
+.venv/
+
+# Temporary files
+*.tmp
