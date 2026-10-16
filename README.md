@@ -6,7 +6,7 @@
 
 ---
 
-## 📌 Executive Summary & Project Overview
+## 📌Summary & Project Overview
 
 This repository hosts an end-to-end, enterprise-grade Machine Learning pipeline built on granular match-level and player-level football performance data. The project systematically addresses all three fundamental paradigms of Machine Learning across distinct tracks:
 
