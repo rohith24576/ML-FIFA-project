@@ -522,8 +522,8 @@ if selected_page == "Overview":
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-title">Classification Acc</div>
-            <div class="metric-value">98.58%</div>
-            <div class="metric-sub">Gradient Boosting (F1: 0.986)</div>
+            <div class="metric-value">91.42%</div>
+            <div class="metric-sub">Gradient Boosting (F1: 0.914)</div>
         </div>
         """, unsafe_allow_html=True)
     with kpi4:
@@ -551,8 +551,8 @@ if selected_page == "Overview":
         with st.container(border=True):
             st.markdown("<h4>🎯 Classification Track</h4>", unsafe_allow_html=True)
             st.caption("Automated pitch position categorization across 10 supervised models.")
-            st.markdown(f"<p style='font-size:0.88rem; margin:6px 0;'><b>Top Model:</b> Gradient Boosting (<b>98.58%</b> Acc, <b>0.9992</b> OvR AUC)</p>", unsafe_allow_html=True)
-            st.markdown(f"<p style='font-size:0.85rem; color:{PALETTE['warm_taupe']}; margin:0;'>Baselines: Logistic Reg (98.17%), SVM (97.58%)</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size:0.88rem; margin:6px 0;'><b>Top Model:</b> Gradient Boosting (<b>91.42%</b> Acc, <b>0.9912</b> OvR AUC)</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size:0.85rem; color:{PALETTE['warm_taupe']}; margin:0;'>Baselines: Logistic Reg (89.17%), SVM (88.75%)</p>", unsafe_allow_html=True)
             
     with col_t2:
         with st.container(border=True):
@@ -575,8 +575,8 @@ if selected_page == "Overview":
             st.markdown("<h4>Classification Benchmark Accuracy</h4>", unsafe_allow_html=True)
             st.caption("Comparison of top classification algorithms ranked by multi-class test accuracy.")
             clf_chart_data = pd.DataFrame({
-                "Model": ["Gradient Boost", "Logistic Reg", "SVM", "Random Forest", "MLP Neural Net", "Bagging", "Decision Tree", "AdaBoost"],
-                "Accuracy": [98.58, 98.17, 97.58, 97.58, 97.42, 95.42, 93.58, 93.08]
+                "Model": ["Gradient Boost (Tuned)", "Gradient Boost", "Logistic Reg", "SVM", "Random Forest", "MLP Neural Net", "Bagging", "Decision Tree", "AdaBoost", "KNN", "Gaussian NB"],
+                "Accuracy": [91.42, 90.83, 89.17, 88.75, 88.58, 88.17, 87.50, 86.92, 86.42, 85.83, 85.08]
             })
             fig_clf = px.bar(clf_chart_data, x="Accuracy", y="Model", orientation="h", text="Accuracy", color_discrete_sequence=[PALETTE['rich_mocha']])
             fig_clf.update_traces(texttemplate='%{text:.2f}%', textposition='inside')
@@ -707,7 +707,7 @@ elif selected_page == "Classification":
     with st.container(border=True):
         st.markdown("<h4>Key Discriminative Predictors</h4>", unsafe_allow_html=True)
         st.caption("Relative feature importance weights driving player position classification.")
-        rf_model = clf_bundle['models']['Random Forest (97.6%)']
+        rf_model = clf_bundle['models']['Random Forest (88.6%)']
         imp_df = pd.DataFrame({"Feature": clf_bundle['features'], "Importance": rf_model.feature_importances_}).sort_values(by="Importance", ascending=False).head(8)
         fig_imp = px.bar(imp_df, x="Importance", y="Feature", orientation="h", color_discrete_sequence=[PALETTE['rich_mocha']])
         fig_imp.update_layout(yaxis=dict(autorange="reversed"), height=210)

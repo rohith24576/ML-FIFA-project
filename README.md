@@ -94,17 +94,17 @@ Eight specialized football performance features were engineered to capture compo
 
 | Part | Algorithm | Accuracy $\uparrow$ | Precision $\uparrow$ | Recall $\uparrow$ | F1-Score $\uparrow$ | ROC-AUC (OvR) $\uparrow$ | Key Analytical Deliverable / Visualization |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Part B** | **Gradient Boosting (Tuned)** | **98.58%** | **0.9858** | **0.9858** | **0.9858** | **0.9992** | Staged Train vs Test Deviance Loss Curve |
-| **Part B** | Gradient Boosting (Base) | 98.33% | 0.9833 | 0.9833 | 0.9833 | 0.9990 | Staged Train vs Test Deviance Loss Curve |
-| **Part A** | Logistic Regression | 98.17% | 0.9817 | 0.9817 | 0.9817 | 0.9992 | Top Feature Coefficients (Forward Position) |
-| **Part A** | Support Vector Machine | 97.58% | 0.9759 | 0.9758 | 0.9758 | 0.9982 | Multi-Class One-vs-Rest ROC Curves |
-| **Part B** | Random Forest | 97.58% | 0.9758 | 0.9758 | 0.9758 | 0.9981 | Top 15 Feature Importances (Gini/MDI) |
-| **Part B** | MLP Neural Network | 97.42% | 0.9743 | 0.9742 | 0.9742 | 0.9987 | Cross-Entropy Loss Convergence Curve |
-| **Part B** | Bagging Classifier | 95.42% | 0.9541 | 0.9542 | 0.9540 | 0.9948 | Ensemble Accuracy vs Estimator Count |
-| **Part A** | Decision Tree | 93.58% | 0.9359 | 0.9358 | 0.9357 | 0.9819 | Hierarchical Decision Rules (Depth=3 Subtree) |
-| **Part B** | AdaBoost | 93.08% | 0.9330 | 0.9308 | 0.9309 | 0.9669 | Staged Test Accuracy Progression Curve |
-| **Part A** | K-Nearest Neighbors | 91.58% | 0.9158 | 0.9158 | 0.9158 | 0.9841 | K-Neighbors Accuracy Optimization Curve |
-| **Part A** | Gaussian Naive Bayes | 84.83% | 0.8654 | 0.8483 | 0.8414 | 0.9741 | Class-Specific Feature Means ($\theta$) Heatmap |
+| **Part B** | **Gradient Boosting (Tuned)** | **91.42%** | **0.9140** | **0.9142** | **0.9140** | **0.9912** | Staged Train vs Test Deviance Loss Curve |
+| **Part B** | Gradient Boosting (Base) | 90.83% | 0.9078 | 0.9083 | 0.9080 | 0.9894 | Staged Train vs Test Deviance Loss Curve |
+| **Part A** | Logistic Regression | 89.17% | 0.8929 | 0.8917 | 0.8921 | 0.9845 | Top Feature Coefficients (Forward Position) |
+| **Part A** | Support Vector Machine | 88.75% | 0.8881 | 0.8875 | 0.8877 | 0.9861 | Multi-Class One-vs-Rest ROC Curves |
+| **Part B** | Random Forest | 88.58% | 0.8854 | 0.8858 | 0.8856 | 0.9813 | Top 15 Feature Importances (Gini/MDI) |
+| **Part B** | MLP Neural Network | 88.17% | 0.8825 | 0.8817 | 0.8820 | 0.9893 | Cross-Entropy Loss Convergence Curve |
+| **Part B** | Bagging Classifier | 87.50% | 0.8743 | 0.8750 | 0.8745 | 0.9791 | Ensemble Accuracy vs Estimator Count |
+| **Part A** | Decision Tree | 86.92% | 0.8684 | 0.8692 | 0.8686 | 0.9708 | Hierarchical Decision Rules (Depth=3 Subtree) |
+| **Part B** | AdaBoost | 86.42% | 0.8654 | 0.8642 | 0.8646 | 0.9440 | Staged Test Accuracy Progression Curve |
+| **Part A** | K-Nearest Neighbors | 85.83% | 0.8572 | 0.8583 | 0.8574 | 0.9751 | K-Neighbors Accuracy Optimization Curve |
+| **Part A** | Gaussian Naive Bayes | 85.08% | 0.8673 | 0.8508 | 0.8443 | 0.9739 | Class-Specific Feature Means ($\theta$) Heatmap |
 
 ---
 
